@@ -27,8 +27,9 @@ def key():
 
 def getExplain(keyArray):
 	word=sys.argv[1]
-        url='http://fanyi.youdao.com/openapi.do?keyfrom=' + keyArray[1] +'&key=' + \
-                 keyArray[0] + '&type=data&doctype=json&version=1.1&q=' + word
+        url='http://fanyi.youdao.com/openapi.do?keyfrom=' + keyArray[1] + \
+        	'&key=' + keyArray[0] + '&type=data&doctype=json&version' \
+        	+ '=1.1&q=' + word
         transJson = requests.get(url).text
 	explain = json.loads(transJson)
 	return explain
