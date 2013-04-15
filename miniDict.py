@@ -39,3 +39,6 @@ if __name__ == "__main__":
 	keyArray = key()
 	explain = getExplain(keyArray)
 	cmdPr(explain)
+
+
+
