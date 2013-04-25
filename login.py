@@ -1,7 +1,18 @@
 #!/usr/bin/python2.7
-# -*- coding: utf-8 -*-
+#coding:utf-8
 
 import urllib2,cookielib,re,urllib,optparse
+import cookielib
+import re
+import urllib
+import optparse
+
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
 
 """
 FUNCTION	:Login youdao Dictionary
