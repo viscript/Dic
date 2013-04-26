@@ -4,14 +4,14 @@
 import requests
 import json
 import sys
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
 """
--------------------------------80size-------------------------------------------
+================================================================================
 """
+
 
 def cmdPr(explain):
 	trans=""
@@ -25,8 +25,8 @@ def key():
 	keyArray = [ key , keyfrom ]
 	return keyArray
 
-def getExplain(keyArray):
-	word=sys.argv[1]
+def getExplain(word):
+	keyArray = key()
         url='http://fanyi.youdao.com/openapi.do?keyfrom=' + keyArray[1] + \
         	'&key=' + keyArray[0] + '&type=data&doctype=json&version' \
         	+ '=1.1&q=' + word
@@ -34,11 +34,7 @@ def getExplain(keyArray):
 	explain = json.loads(transJson)
 	return explain
 	
-
-if __name__ == "__main__":
-	keyArray = key()
-	explain = getExplain(keyArray)
+def transMain(word):
+	explain = getExplain(word)
 	cmdPr(explain)
-
-
 
