@@ -25,6 +25,22 @@ AUTHOR		:HankZhou
 
 # print 80 "="s
 
+def getPageNums(content):
+
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(content);
+    getContent = soup.find('div',id="wrapper").find('div',id="listmode"). \
+        find('div',id="wordfoot").find('div',id="pagination").findAll('a' \
+        ,attrs = {'href':re.compile('.*')});
+    lens = len(getContent) - 2;
+    wordList=["wordlist?p=0&tags="]
+    for i in xrange(lens):
+        wordList.append(getContent[i]['href']);
+#    wordList.append("wordlist?p=" + str(lens+1) + "&tags=")
+    return wordList;
+
+
 def pe(quantity=80):
     print("="*quantity)
 
@@ -52,7 +68,7 @@ def prCookie(cookieJar):
     pe();
 
 # login youdao
-def loginYoudao(deBug):
+def loginYoudao(deBug=0,sync=0):
     if deBug != 1 :
         pe(20);
     else:
@@ -98,14 +114,26 @@ def loginYoudao(deBug):
     checkBack = loginCheck(cj);
     if checkBack :
         print("Login success!");
-        return resp.read();
+        if sync != 1:return True;
     else:
         print("Login failure");
         return False;
+    if sync != 1:return False;
+
+
+
+    """
+    [syncYoudao]
+    """
+
+    wordList = getPageNums(resp.read());
+    test = urllib2.urlopen("http://dict.youdao.com/wordbook/" + wordList[0]);
+    getPageWord
+    print test.read()
 
 # main
 if __name__ == "__main__":
-    loginback = loginYoudao(0);
+    loginback = loginYoudao(sync=1);
     pe(20);
-    if loginback != False:
-        mainWordData(loginback);
+#    if loginback != False:
+#        mainWordData(loginback);

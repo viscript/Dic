@@ -2,6 +2,7 @@
 #coding:utf-8
 
 import sys
+import os
 reload(sys)
 sys.setdefaultencoding('utf-8')
 from trans import transMain
@@ -12,16 +13,15 @@ from trans import transMain
 """
 
 def screenMenu():
-    menuDict = { 
-        "sync" : "SYNC YouDao [同步有道单词本]",
-        "recite" : "Recite Word [背单词]",
-        "accurate" : "Accurate Translation [精确翻译]",
-        "localWord" : "Local Word [查看本地单词本]"
-    };
-    n = 1;
-    for menu in menuDict.keys():
-        sys.stdout.write("[" + str(n) + "] " + menuDict[menu] + "\n\r")
-        n = n + 1;
+    menuDict = [''];
+    menuDict.append("Local Word [查看本地单词本]");
+    menuDict.append("Recite Word [背单词]");
+    menuDict.append("Accurate Translation [精确翻译]");
+    menuDict.append("Exit [退出]");
+    count = 1;
+    for index,item in enumerate(menuDict):
+        if index == 0:continue;
+        sys.stdout.write("[" + str(index) + "] " + item + "\n\r");
 
 def welcome():
 
@@ -74,9 +74,37 @@ def checkArgs(lens,argsArray):
         if  lens ==2 and argsArray[1] != "+":
             error = 0;
     return error
-        
+    
+def switchMenu():
+    switchId = raw_input("->>");
+    swithcMenuSwitch = {
+        '1':lambda:sys.stdout.write("1"),
+        '2':lambda:sys.stdout.write("2"),
+        '3':lambda:sys.stdout.write("3"),
+        '4':lambda:exitReWord()
+        };
+    if not switchId in swithcMenuSwitch.keys():
+        sys.stdout.write("错误，请输入菜单序号！\n\r");
+        return switchMenu(); 
+    swithcMenuSwitch[switchId]();
+    return True;
+
+    
+"""
+reform
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"""
+
+def exitReWord():
+    sys.stdout.write("退出中...\n\r")
+    exit(1);
+
+"""
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"""
 
 if __name__ == "__main__":
+    os.system("clear");
     (opts,args) = main();
     lens = len(args);
     if len(args) > 0 and checkArgs(lens,args):
@@ -84,3 +112,5 @@ if __name__ == "__main__":
     elif lens == 0:
         welcome();
         screenMenu();
+        IsOK = switchMenu();
+        if IsOK:sys.stdout.write("ok");
