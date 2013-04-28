@@ -17,6 +17,7 @@ def screenMenu():
     menuDict.append("Local Word [查看本地单词本]");
     menuDict.append("Recite Word [背单词]");
     menuDict.append("Accurate Translation [精确翻译]");
+    menuDict.append("SYNCYouDao[同步有道单词本]");
     menuDict.append("Exit [退出]");
     count = 1;
     for index,item in enumerate(menuDict):
@@ -76,12 +77,16 @@ def checkArgs(lens,argsArray):
     return error
     
 def switchMenu():
+         
+    from  operationYoudao import operationYoudaoMain
+     
     switchId = raw_input("->>");
     swithcMenuSwitch = {
         '1':lambda:sys.stdout.write("1"),
         '2':lambda:sys.stdout.write("2"),
         '3':lambda:sys.stdout.write("3"),
-        '4':lambda:exitReWord()
+        '4':lambda:operationYoudaoMain(),
+        '5':lambda:exitReWord()
         };
     if not switchId in swithcMenuSwitch.keys():
         sys.stdout.write("错误，请输入菜单序号！\n\r");
@@ -112,5 +117,6 @@ if __name__ == "__main__":
     elif lens == 0:
         welcome();
         screenMenu();
-        IsOK = switchMenu();
-        if IsOK:sys.stdout.write("ok");
+        while 1:
+            IsOK = switchMenu();
+            if IsOK:sys.stdout.write("测试结束。\n\r");

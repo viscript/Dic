@@ -13,6 +13,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 from wordData import mainWordData
+from localWord import localWordMain
 
 """
 FUNCTION	:Login youdao Dictionary
@@ -37,8 +38,45 @@ def getPageNums(content):
     wordList=["wordlist?p=0&tags="]
     for i in xrange(lens):
         wordList.append(getContent[i]['href']);
-#    wordList.append("wordlist?p=" + str(lens+1) + "&tags=")
     return wordList;
+
+def getWordNums(content):
+
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(content);
+    getWordNums = soup.find('div',id="wrapper").find('div',id="listmode") \
+        .find('div',attrs={"class":"right"}).findAll('strong')[1].string
+    pageNums = 15
+    pages = int(getWordNums)/pageNums + 1
+    lastPageNums = int(getWordNums)%pageNums
+
+    return pageNums,pages,lastPageNums
+
+
+def getPageWord(content,pageNums=15):
+    
+    from bs4 import BeautifulSoup
+ 
+    getWord = []
+    soup = BeautifulSoup(content);
+    getContent = soup.find('div',id="wrapper").find('div',id="listmode"). \
+        find('div',id="wordlist").find('table').find('tbody')
+    for i in xrange(pageNums):
+        word0 = getContent.findAll('tr')[i].findAll('td')  \
+                [1].find('div')['title'];
+        word1 = getContent.findAll('tr')[i].findAll('td')  \
+                [2].find('div')['title'];
+        word2 = getContent.findAll('tr')[i].findAll('td')  \
+                [3].find('div')['title'];
+        word3 = getContent.findAll('tr')[i].findAll('td')  \
+                [4].string;
+        word4 = getContent.findAll('tr')[i].findAll('td')  \
+                [5].find('div')['title'];
+        getWordCon = [word0,word1,word2,word3,word4];
+        getWord.append(getWordCon);
+        getWordCon = [];
+    return getWord     
 
 
 def pe(quantity=80):
@@ -68,11 +106,11 @@ def prCookie(cookieJar):
     pe();
 
 # login youdao
-def loginYoudao(deBug=0,sync=0):
-    if deBug != 1 :
-        pe(20);
+def loginYoudao(deBug=False,sync=0):
+    if deBug:
+        pe(80);
     else:
-        pe();
+        pe(20);
     cj = cookielib.CookieJar();
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj));
     urllib2.install_opener(opener);
@@ -82,7 +120,7 @@ def loginYoudao(deBug=0,sync=0):
     """
     cookie Debug
     """
-    if deBug == 1 :prCookie(cj);
+    if deBug:prCookie(cj);
 
     youdaoLoginUrl = "https://reg.163.com/logins.jsp";
     postDict = {
@@ -106,7 +144,7 @@ def loginYoudao(deBug=0,sync=0):
     """
     cookie Debug
     """
-    if deBug == 1 :prCookie(cj); 
+    if deBug:prCookie(cj); 
 
     pattern = re.compile(r'http://reg.youdao.com/next.jsp[a-zA-Z%?&=_.0-9]*');
     getSearch = re.search(pattern,resp.read());
@@ -127,13 +165,30 @@ def loginYoudao(deBug=0,sync=0):
     """
 
     wordList = getPageNums(resp.read());
-    test = urllib2.urlopen("http://dict.youdao.com/wordbook/" + wordList[0]);
-    getPageWord
-    print test.read()
+    baseUrl = urllib2.urlopen("http://dict.youdao.com/wordbook/" + wordList[0]);
+    pageNums,pages,lastPageNums = getWordNums(baseUrl)
+    if deBug:print pageNums,pages,lastPageNums;
+    allGetWord = [];
+    for index,item in enumerate(wordList):
+        nowUrl = "http://dict.youdao.com/wordbook/" + \
+            wordList[index]
+        nowUrlrq = urllib2.urlopen(nowUrl)
+        nowUrlread = nowUrlrq.read();
+        if index < (pages - 1):
+            getWord = getPageWord(nowUrlread);
+        elif index == (pages - 1):
+            getWord = getPageWord(nowUrlread,pageNums=lastPageNums);
+        else:
+            if deBug:print "Than expected error in word";
+            getWord == False;
+            break;
+        if getWord:
+            allGetWord += getWord 
+    if len(allGetWord) == pageNums*(pages - 1) + lastPageNums:
+        localWordMain(allGetWord);
 
-# main
-if __name__ == "__main__":
-    loginback = loginYoudao(sync=1);
+def operationYoudaoMain():
+    loginback = loginYoudao(deBug=False,sync=1);
     pe(20);
 #    if loginback != False:
 #        mainWordData(loginback);
