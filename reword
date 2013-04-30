@@ -12,20 +12,38 @@ from trans import transMain
 ================================================================================
 """
 
+def screenClear():
+    os.system("clear");    
+
+
 def screenMenu():
-    menuDict = [''];
-    menuDict.append("Local Word [查看本地单词本]");
+    welcome();
+    sys.stdout.write("* 您的位置在 [ 首页 ] \n\r \n\r")
+    menuDict = [];
+    menuDict.append("MyWords [本地单词本]");
     menuDict.append("Recite Word [背单词]");
     menuDict.append("Accurate Translation [精确翻译]");
-    menuDict.append("SYNCYouDao[同步有道单词本]");
-    menuDict.append("Exit [退出]");
-    count = 1;
+    menuDict.append("Exit Reword [退出]");
     for index,item in enumerate(menuDict):
-        if index == 0:continue;
-        sys.stdout.write("[" + str(index) + "] " + item + "\n\r");
+        sys.stdout.write("[" + str(index+1) + "] " + item + "\n\r");
+    switchMenu();
+    
+
+def screenMyWords():
+    welcome();
+    sys.stdout.write("* 您的位置在 [ 首页 ] -> [ 本地单词本 ] \n\r \n\r");
+    menuMyWords = []
+    menuMyWords.append("List word [显示单词]");
+    menuMyWords.append("SYNCYouDao[与有道单词本同步]");
+    menuMyWords.append("Back [返回主菜单]");
+    menuMyWords.append("Exit ReWord [退出ReWord]");
+    for index,item in enumerate(menuMyWords):
+        sys.stdout.write("[" + str(index+1) + "] " + item + "\n\r");  
+    switchMyWords();
 
 def welcome():
 
+    screenClear();
     softName = "ReWord";
     softVersion = "V0.9";
     author = "HankZhou";
@@ -78,23 +96,37 @@ def checkArgs(lens,argsArray):
     
 def switchMenu():
          
-    from  operationYoudao import operationYoudaoMain
-     
     switchId = raw_input("->>");
     swithcMenuSwitch = {
-        '1':lambda:sys.stdout.write("1"),
+        '1':lambda:screenMyWords(),
         '2':lambda:sys.stdout.write("2"),
         '3':lambda:sys.stdout.write("3"),
-        '4':lambda:operationYoudaoMain(),
-        '5':lambda:exitReWord()
+        '4':lambda:exitReWord()
         };
     if not switchId in swithcMenuSwitch.keys():
         sys.stdout.write("错误，请输入菜单序号！\n\r");
         return switchMenu(); 
     swithcMenuSwitch[switchId]();
-    return True;
+    return switchMenu();
 
-    
+def switchMyWords():
+
+    from  operationYoudao import operationYoudaoMain
+    from  localWord import openLocalWordMain
+
+    switchMyWordsId = raw_input("|->>");
+    switchMyWordsSwitch = {
+        '1':lambda:openLocalWordMain(),
+        '2':lambda:operationYoudaoMain(),
+        '3':lambda:screenMenu(),
+        '4':lambda:exitReWord()
+        };
+    if not switchMyWordsId in switchMyWordsSwitch.keys():
+        sys.stdout.write("错误，请输入菜单序号！\n\r");
+        return switchMyWords();
+    switchMyWordsSwitch[switchMyWordsId]();
+    return screenMyWords();
+
 """
 reform
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -109,14 +141,9 @@ def exitReWord():
 """
 
 if __name__ == "__main__":
-    os.system("clear");
     (opts,args) = main();
     lens = len(args);
     if len(args) > 0 and checkArgs(lens,args):
         transMain(args[0]); 
     elif lens == 0:
-        welcome();
         screenMenu();
-        while 1:
-            IsOK = switchMenu();
-            if IsOK:sys.stdout.write("测试结束。\n\r");
