@@ -41,6 +41,22 @@ def screenMyWords():
         sys.stdout.write("[" + str(index+1) + "] " + item + "\n\r");  
     switchMyWords();
 
+def screenListWord():
+
+    from  localWord import openLocalWordMain
+
+    welcome();
+    sys.stdout.write("* 您的位置在 [ 首页 ] -> [ 本地单词本 ] -> [ 显示单词 ] \n\r \n\r");
+    
+    openLocalWordMain()
+    menuWordList = [];
+    menuWordList.append("[要删除单词的序号]");
+    menuWordList.append("Back [返回主菜单]");
+    menuWordList.append("Exit ReWord [退出ReWord]");
+    for index,item in enumerate(menuWordList):
+        sys.stdout.write("[" + str(index+1) + "] " + item + "\n\r");
+    switchListWord();
+
 def welcome():
 
     screenClear();
@@ -116,7 +132,7 @@ def switchMyWords():
 
     switchMyWordsId = raw_input("|->>");
     switchMyWordsSwitch = {
-        '1':lambda:openLocalWordMain(),
+        '1':lambda:screenListWord(),           #penLocalWordMain(),
         '2':lambda:operationYoudaoMain(),
         '3':lambda:screenMenu(),
         '4':lambda:exitReWord()
@@ -126,6 +142,24 @@ def switchMyWords():
         return switchMyWords();
     switchMyWordsSwitch[switchMyWordsId]();
     return screenMyWords();
+
+def switchListWord():
+    
+    switchListWordId = raw_input("||->>");
+    switchListWordSwitch = {
+        '1':lambda:sys.stdout.write("1"),
+        '2':lambda:screenMenu(),
+        '3':lambda:exitReWord()
+        };
+    if not switchListWordId in switchListWordSwitch.keys():
+        sys.stdout.wtrite("错误，请输入菜单序号！\n\r");
+        return switchListWord();
+    switchListWordSwitch[switchListWordId]();
+    return screenListWord();
+
+
+
+
 
 """
 reform
