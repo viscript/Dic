@@ -115,8 +115,8 @@ def switchMenu():
     switchId = raw_input("->>");
     swithcMenuSwitch = {
         '1':lambda:screenMyWords(),
-        '2':lambda:sys.stdout.write("2"),
-        '3':lambda:sys.stdout.write("3"),
+        '2':lambda:sys.stdout.write("2\n\r"),
+        '3':lambda:sys.stdout.write("3\n\r"),
         '4':lambda:exitReWord()
         };
     if not switchId in swithcMenuSwitch.keys():

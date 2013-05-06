@@ -42,6 +42,18 @@ def localWordMain(localWord):
 
 def openLocalWordMain():
    
+    import re    
+
+    wordList = localArray();
+    for index,item in enumerate(wordList):
+        sys.stdout.write("<" + str(index + 1) + "> ");
+        sys.stdout.write("" + item[0] + " \n\r");
+        if item[1]:
+            sys.stdout.write("音标: " + item[1] + " \n\r");
+        sys.stdout.write("" + item[2] + " \n\r");
+        sys.stdout.write("\n\r");
+    
+def localArray():
     pwd,osName,configName,wordName = getPara();
     fileName = wordName[0] + wordName[1];
     if not os.path.isfile(fileName):
@@ -50,12 +62,6 @@ def openLocalWordMain():
     wordList=[]
     for index,item in enumerate(fp):
         item = item.strip('\n');
+        item = item.replace(' ','');
         wordList.append(item.split("#"));
-    for index,item in enumerate(wordList):
-        sys.stdout.write("[" + str(index + 1) + "]");
-        sys.stdout.write(" " + item[0] + " ");
-        sys.stdout.write(" " + item[1] + " ");
-        sys.stdout.write(" " + item[2] + " ");
-        sys.stdout.write("\n\r");
-    
-
+    return wordList;
