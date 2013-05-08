@@ -111,19 +111,22 @@ def checkArgs(lens,argsArray):
     return error
     
 def switchMenu():
-         
+        
+    from recite  import reciteC2E
+    from souptest import accurate
+ 
     switchId = raw_input("->>");
     swithcMenuSwitch = {
         '1':lambda:screenMyWords(),
-        '2':lambda:sys.stdout.write("2\n\r"),
-        '3':lambda:sys.stdout.write("3\n\r"),
+        '2':lambda:reciteC2E(),
+        '3':lambda:accurate(),
         '4':lambda:exitReWord()
         };
     if not switchId in swithcMenuSwitch.keys():
         sys.stdout.write("错误，请输入菜单序号！\n\r");
         return switchMenu(); 
     swithcMenuSwitch[switchId]();
-    return switchMenu();
+    return screenMenu();
 
 def switchMyWords():
 
