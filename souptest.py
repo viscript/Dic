@@ -15,6 +15,8 @@ import urllib2
 import re
 import sys
 import os
+from common import comPara
+
 
 
 """
@@ -77,7 +79,9 @@ main function
 """
 
 def accurate():
-    os.system('clear');
+
+    pa = comPara();
+    pa.clearScreen();
     word = raw_input("查询:");
     htmlurl = urlset(word);
     content = getHtml(htmlurl);

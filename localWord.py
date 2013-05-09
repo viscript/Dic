@@ -3,26 +3,24 @@
 
 import os
 import sys
+from common import comPara
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-#基本参数，以后可能会扩展到config。
-def getPara():
-    pwd = os.getcwd();
-    osName = os.name;
-    configName = "ReWord.conf"
-    wordName = ["localWord",".txt"]
-    return pwd,osName,configName,wordName; 
+
+
+pa = comPara();
+pwd = pa.pwd;
+osName = pa.osName;
+configName = pa.configName;
+wordName = pa.wordName;
+
 
 #同步单词函数
 def localWordMain(localWord):
 
-    pwd,osName,configName,wordName = getPara();
-    if osName == "posix":
-        s = '/';
-    else:
-        s = "\\";
+    backslash = pa.backslash();
     out="";
     fileName = wordName[0] + wordName[1]
     if os.path.isfile(fileName):
@@ -55,7 +53,6 @@ def openLocalWordMain():
         sys.stdout.write("\n\r");
 #打开本地单词本并以列表返回
 def localArray():
-    pwd,osName,configName,wordName = getPara();
     fileName = wordName[0] + wordName[1];
     if not os.path.isfile(fileName):
         return False;

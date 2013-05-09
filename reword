@@ -6,14 +6,11 @@ import os
 reload(sys)
 sys.setdefaultencoding('utf-8')
 from trans import transMain
-
+from common import comPara
 
 """
 ================================================================================
 """
-
-def screenClear():
-    os.system("clear");    
 
 
 def screenMenu():
@@ -59,7 +56,8 @@ def screenListWord():
 
 def welcome():
 
-    screenClear();
+    pa = comPara();
+    pa.clearScreen();
     softName = "ReWord";
     softVersion = "V0.9";
     author = "HankZhou";
